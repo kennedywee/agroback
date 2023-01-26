@@ -127,5 +127,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # see https://help.pythonanywhere.com/pages/DjangoStaticFiles for more info
 MEDIA_ROOT = '/home/kennedywee/agroback/media'
 MEDIA_URL = '/media/'
-STATIC_ROOT = '/home/dragonkarbo/agroback/static'
+STATIC_ROOT = '/home/kennedywee/agroback/static'
 STATIC_URL = '/static/'

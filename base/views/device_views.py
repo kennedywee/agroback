@@ -65,20 +65,8 @@ def updateDevice(request, pk):
     data = request.data
     device = Device.objects.get(id=pk)
 
-    device.name = data['name']
-    device.device_type = data['device_type']
-    device.location = data['location']
-    device.field1 = data['field1']
-    device.field2 = data['field2']
-    device.field3 = data['field3']
-    device.field4 = data['field4']
-    device.field5 = data['field5']
-    device.type_field1 = data['type_field1']
-    device.type_field2 = data['type_field2']
-    device.type_field3 = data['type_field3']
-    device.type_field4 = data['type_field4']
-    device.type_field5 = data['type_field5']
-    device.description = data['description']
+    for key, value in data.items():
+        setattr(device, key, value)
 
     device.save()
     serializer = DeviceSerializer(device, many=False)

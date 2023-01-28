@@ -40,35 +40,19 @@ class CreateData(generics.ListCreateAPIView):
         api_key = request.GET['api_key']
         device = get_object_or_404(Device, api_key=api_key)
 
-        try:
-            field1 = request.GET['field1']
-        except:
-            data = Data.objects.filter(device=device.id).first()
-            field1 = data.field1
+        latest_data = Data.objects.filter(
+            device=device).order_by('-created').first()
 
-        try:
-            field2 = request.GET['field2']
-        except:
-            data = Data.objects.filter(device=device.id).first()
-            field2 = data.field2
-
-        try:
-            field3 = request.GET['field3']
-        except:
-            data = Data.objects.filter(device=device.id).first()
-            field3 = data.field3
-
-        try:
-            field4 = request.GET['field4']
-        except:
-            data = Data.objects.filter(device=device.id).first()
-            field4 = data.field4
-
-        try:
-            field5 = request.GET['field5']
-        except:
-            data = Data.objects.filter(device=device.id).first()
-            field5 = data.field5
+        field1 = request.GET.get(
+            'field1', latest_data.field1 if latest_data else None)
+        field2 = request.GET.get(
+            'field2', latest_data.field2 if latest_data else None)
+        field3 = request.GET.get(
+            'field3', latest_data.field3 if latest_data else None)
+        field4 = request.GET.get(
+            'field4', latest_data.field4 if latest_data else None)
+        field5 = request.GET.get(
+            'field5', latest_data.field5 if latest_data else None)
 
         new_data = Data.objects.create(device=device,
                                        field1=field1,
@@ -76,7 +60,6 @@ class CreateData(generics.ListCreateAPIView):
                                        field3=field3,
                                        field4=field4,
                                        field5=field5)
-
         new_data.save()
 
         serializer = DataSerializer(new_data)

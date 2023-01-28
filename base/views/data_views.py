@@ -4,8 +4,21 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import generics
 
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
+
 from base.models import Device, Data
 from base.serializers import DataSerializer
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getMyData(request, pk):
+
+    device = get_object_or_404(Device, id=pk)
+    data = device.data_set.all()
+    serializer = DataSerializer(data, many=True)
+    return Response(serializer.data)
 
 
 class DataList(APIView):

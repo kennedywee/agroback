@@ -1,10 +1,13 @@
 from django.urls import path
-from . import views
+from base.views import data_views as views
+
 
 urlpatterns = [
-    # Read Data
-    path('read/', views.DataList.as_view(), name='data-list'),
 
-    # Update Data
+    # Fronted
+    path('read/<str:pk>/', views.getMyData, name='frontdata-list'),
+
+    # Microcontroller
+    path('read/', views.DataList.as_view(), name='data-list'),
     path('write/', views.CreateData.as_view(), name='data-add'),
 ]

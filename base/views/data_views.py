@@ -21,6 +21,23 @@ def getMyData(request, pk):
     return Response(serializer.data)
 
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getDashboardData(request):
+    user = request.user
+
+    devices = Device.objects.filter(user=user)
+
+    data = []
+
+    for device in devices:
+        device_data = Data.objects.filter(device=device)
+        data.extend(device_data)
+
+    serializer = DataSerializer(data, many=True)
+    return Response(serializer.data)
+
+
 class DataList(APIView):
 
     def get(self, request, format=None):

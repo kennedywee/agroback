@@ -1,5 +1,6 @@
 from django.db.models.signals import pre_save
 from django.contrib.auth.models import User
+from base.models import Data, Device
 
 
 def updateUser(sender, instance, **kwargs):

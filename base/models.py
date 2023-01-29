@@ -78,11 +78,11 @@ class Device(models.Model):
 
 class Data(models.Model):
     device = models.ForeignKey(Device, on_delete=models.CASCADE)
-    field1 = models.CharField(max_length=10, null=True, blank=True)
-    field2 = models.CharField(max_length=10, null=True, blank=True)
-    field3 = models.CharField(max_length=10, null=True, blank=True)
-    field4 = models.CharField(max_length=10, null=True, blank=True)
-    field5 = models.CharField(max_length=10, null=True, blank=True)
+    field1 = models.IntegerField(null=True, blank=True)
+    field2 = models.IntegerField(null=True, blank=True)
+    field3 = models.IntegerField(null=True, blank=True)
+    field4 = models.IntegerField(null=True, blank=True)
+    field5 = models.IntegerField(null=True, blank=True)
 
     created = models.DateTimeField(auto_now_add=True)
 
@@ -111,3 +111,44 @@ class Alert(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class FieldTypes(models.TextChoices):
+    LINECHART = 'linechart', ('Line Chart')
+    TEMPERATURE = 'temperature', ('Temperature Chart')
+
+
+class Widget(models.Model):
+
+    i = models.AutoField(primary_key=True, editable=False)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    type = models.CharField(max_length=20, choices=FieldTypes.choices)
+    device = models.ForeignKey(Device, on_delete=models.SET_NULL, null=True)
+    datafield = models.CharField(max_length=20)
+    w = models.IntegerField(null=True, blank=True)
+    h = models.IntegerField(null=True, blank=True)
+    y = models.IntegerField(null=True, blank=True)
+    x = models.IntegerField(null=True, blank=True)
+    y = models.IntegerField(null=True, blank=True)
+    maxH = models.IntegerField(null=True, blank=True)
+    minH = models.IntegerField(null=True, blank=True)
+    maxW = models.IntegerField(null=True, blank=True)
+    minW = models.IntegerField(null=True, blank=True)
+    moved = models.BooleanField(default=False)
+    static = models.BooleanField(default=False)
+    isResizable = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.type
+
+    def save(self, *args, **kwargs):
+        if self.type == FieldTypes.TEMPERATURE:
+            self.isResizable = False
+            self.maxH = 3
+            self.maxW = 4
+            self.minH = 3
+            self.minW = 4
+            self.w = 3
+            self.h = 4
+
+        return super().save(*args, **kwargs)

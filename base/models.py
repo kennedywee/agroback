@@ -115,7 +115,10 @@ class Alert(models.Model):
 
 class FieldTypes(models.TextChoices):
     LINECHART = 'linechart', ('Line Chart')
-    TEMPERATURE = 'temperature', ('Temperature Chart')
+    GAUGE = 'gauge', ('Gauge Chart')
+    SWITCH = 'switch', ('Switch Control')
+    INDICATOR = 'indicator', ('Indicator Chart')
+    PERCENTAGE = 'percentage', ('Percentage Chart')
 
 
 class Widget(models.Model):
@@ -127,9 +130,8 @@ class Widget(models.Model):
     datafield = models.CharField(max_length=20)
     w = models.IntegerField(null=True, blank=True)
     h = models.IntegerField(null=True, blank=True)
-    y = models.IntegerField(null=True, blank=True)
-    x = models.IntegerField(null=True, blank=True)
-    y = models.IntegerField(null=True, blank=True)
+    y = models.IntegerField(default=0, null=False, blank=True)
+    x = models.IntegerField(default=0, null=False, blank=True)
     maxH = models.IntegerField(null=True, blank=True)
     minH = models.IntegerField(null=True, blank=True)
     maxW = models.IntegerField(null=True, blank=True)
@@ -142,13 +144,45 @@ class Widget(models.Model):
         return self.type
 
     def save(self, *args, **kwargs):
-        if self.type == FieldTypes.TEMPERATURE:
-            self.isResizable = False
-            self.maxH = 3
-            self.maxW = 4
-            self.minH = 3
-            self.minW = 4
-            self.w = 3
-            self.h = 4
+        if self.pk is None:
+            if self.type == FieldTypes.LINECHART:
+                self.maxH = 11
+                self.maxW = 12
+                self.minH = 8
+                self.minW = 7
+                self.w = 8
+                self.h = 7
+
+            elif self.type == FieldTypes.GAUGE:
+                self.maxH = 5
+                self.maxW = 3
+                self.minH = 5
+                self.minW = 3
+                self.w = 3
+                self.h = 5
+
+            elif self.type == FieldTypes.SWITCH:
+                self.maxH = 5
+                self.maxW = 3
+                self.minH = 4
+                self.minW = 2
+                self.w = 2
+                self.h = 4
+
+            elif self.type == FieldTypes.INDICATOR:
+                self.maxH = 5
+                self.maxW = 3
+                self.minH = 4
+                self.minW = 2
+                self.w = 2
+                self.h = 4
+
+            elif self.type == FieldTypes.PERCENTAGE:
+                self.maxH = 5
+                self.maxW = 3
+                self.minH = 5
+                self.minW = 3
+                self.w = 3
+                self.h = 5
 
         return super().save(*args, **kwargs)

@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from rest_framework_simplejwt.tokens import RefreshToken
-from .models import Device, Data, Alert
+from .models import Device, Data, Alert, Widget
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -50,4 +50,11 @@ class DataSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Data
+        fields = "__all__"
+
+
+class WidgetSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Widget
         fields = "__all__"

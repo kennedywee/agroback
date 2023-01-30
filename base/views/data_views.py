@@ -45,7 +45,7 @@ class DataList(APIView):
         device = get_object_or_404(Device, api_key=api_key)
         datas = Data.objects.filter(device=device.id)
 
-        serializer = DataSerializer(datas, many=True)
+        serializer = DataSerializer(datas, many=False)
         return Response(serializer.data)
 
 

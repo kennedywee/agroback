@@ -22,6 +22,8 @@ class Device(models.Model):
     device_type = models.CharField(max_length=60)
     location = models.CharField(max_length=60, null=True, blank=True)
 
+    active = models.BooleanField(default=False)
+
     field1 = models.CharField(max_length=20, null=True, blank=True)
     field2 = models.CharField(max_length=20, null=True, blank=True)
     field3 = models.CharField(max_length=20, null=True, blank=True)

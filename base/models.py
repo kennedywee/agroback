@@ -11,11 +11,11 @@ API_KEY_LENGTH = 20
 class Device(models.Model):
 
     class FieldTypes(models.TextChoices):
-        DATA = 'DF', ('DataField')
-        HUMIDITY = 'HS', ('HumiditySensor')
-        LIGHT = 'LS', ('LightSensor')
-        TEMPERATURE = 'TS', ('TemperatureSensor')
-        RELAY = 'RY', ('RELAY')
+        DATA = 'data', ('DataField')
+        TEMPERATURE = 'temperature', ('HumiditySensor')
+        LIGHT = 'soil', ('LightSensor')
+        HUMIDITY = 'humidity', ('TemperatureSensor')
+        RELAY = 'relay', ('Relay')
 
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     name = models.CharField(max_length=60)
@@ -30,19 +30,19 @@ class Device(models.Model):
     field4 = models.CharField(max_length=20, null=True, blank=True)
     field5 = models.CharField(max_length=20, null=True, blank=True)
 
-    type_field1 = models.CharField(max_length=2,
+    type_field1 = models.CharField(max_length=20,
                                    choices=FieldTypes.choices,
                                    default=FieldTypes.DATA)
-    type_field2 = models.CharField(max_length=2,
+    type_field2 = models.CharField(max_length=20,
                                    choices=FieldTypes.choices,
                                    default=FieldTypes.DATA)
-    type_field3 = models.CharField(max_length=2,
+    type_field3 = models.CharField(max_length=20,
                                    choices=FieldTypes.choices,
                                    default=FieldTypes.DATA)
-    type_field4 = models.CharField(max_length=2,
+    type_field4 = models.CharField(max_length=20,
                                    choices=FieldTypes.choices,
                                    default=FieldTypes.DATA)
-    type_field5 = models.CharField(max_length=2,
+    type_field5 = models.CharField(max_length=20,
                                    choices=FieldTypes.choices,
                                    default=FieldTypes.DATA)
 
@@ -116,6 +116,7 @@ class Alert(models.Model):
 
 
 class FieldTypes(models.TextChoices):
+    NEW = 'newchart', ('New Chart')
     LINECHART = 'linechart', ('Line Chart')
     GAUGE = 'gauge', ('Gauge Chart')
     SWITCH = 'switch', ('Switch Control')
@@ -127,9 +128,11 @@ class Widget(models.Model):
 
     i = models.AutoField(primary_key=True, editable=False)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    type = models.CharField(max_length=20, choices=FieldTypes.choices)
-    device = models.ForeignKey(Device, on_delete=models.SET_NULL, null=True)
-    datafield = models.CharField(max_length=20)
+    type = models.CharField(
+        max_length=20, choices=FieldTypes.choices, default=FieldTypes.NEW)
+    device = models.ForeignKey(
+        Device, on_delete=models.SET_NULL, null=True, blank=True)
+    datafield = models.CharField(max_length=20, blank=True)
     w = models.IntegerField(null=True, blank=True)
     h = models.IntegerField(null=True, blank=True)
     y = models.IntegerField(default=0, null=False, blank=True)
@@ -147,7 +150,15 @@ class Widget(models.Model):
 
     def save(self, *args, **kwargs):
         if self.pk is None:
-            if self.type == FieldTypes.LINECHART:
+            if self.type == FieldTypes.NEW:
+                self.maxH = 11
+                self.maxW = 12
+                self.minH = 8
+                self.minW = 7
+                self.w = 8
+                self.h = 7
+
+            elif self.type == FieldTypes.LINECHART:
                 self.maxH = 11
                 self.maxW = 12
                 self.minH = 8

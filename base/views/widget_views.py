@@ -31,3 +31,15 @@ def updateWidget(request, pk):
     widget.save()
     serializer = WidgetSerializer(widget, many=False)
     return Response(serializer.data)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def createWidget(request):
+    user = request.user
+
+    widget = Widget.objects.create(user=user)
+
+    widget.save()
+    serializer = WidgetSerializer(widget, many=False)
+    return Response(serializer.data)

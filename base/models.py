@@ -80,11 +80,11 @@ class Device(models.Model):
 
 class Data(models.Model):
     device = models.ForeignKey(Device, on_delete=models.CASCADE)
-    field1 = models.IntegerField(null=True, blank=True)
-    field2 = models.IntegerField(null=True, blank=True)
-    field3 = models.IntegerField(null=True, blank=True)
-    field4 = models.IntegerField(null=True, blank=True)
-    field5 = models.IntegerField(null=True, blank=True)
+    field1 = models.FloatField(null=True, blank=True)
+    field2 = models.FloatField(null=True, blank=True)
+    field3 = models.FloatField(null=True, blank=True)
+    field4 = models.FloatField(null=True, blank=True)
+    field5 = models.FloatField(null=True, blank=True)
 
     created = models.DateTimeField(auto_now_add=True)
 

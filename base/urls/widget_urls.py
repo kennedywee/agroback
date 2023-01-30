@@ -3,5 +3,7 @@ from base.views import widget_views as views
 
 urlpatterns = [
     path('', views.getMyWidgets, name='widgets'),
+    path('update/<str:pk>/', views.updateWidget,
+         name='widgets-update'),
 
 ]

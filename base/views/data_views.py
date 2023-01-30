@@ -21,6 +21,34 @@ def getMyData(request, pk):
     return Response(serializer.data)
 
 
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def createData(request):
+
+    data = request.data
+    id = request.data["id"]
+    device = get_object_or_404(Device, id=id)
+
+    latest_data = Data.objects.filter(
+        device=device).order_by('-created').first()
+
+    field1 = data.get("field1") if latest_data else None
+    field2 = data.get("field2") if latest_data else None
+    field3 = data.get("field3") if latest_data else None
+    field4 = data.get("field4") if latest_data else None
+    field5 = data.get("field5") if latest_data else None
+
+    new_data = Data.objects.create(device=device,
+                                   field1=field1,
+                                   field2=field2,
+                                   field3=field3,
+                                   field4=field4,
+                                   field5=field5)
+    new_data.save()
+    serializer = DataSerializer(new_data)
+    return Response(serializer.data)
+
+
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def getDashboardData(request):
@@ -43,9 +71,9 @@ class DataList(APIView):
     def get(self, request, format=None):
         api_key = request.GET['api_key']
         device = get_object_or_404(Device, api_key=api_key)
-        datas = Data.objects.filter(device=device.id)
+        data = Data.objects.filter(device=device.id).first()
 
-        serializer = DataSerializer(datas, many=False)
+        serializer = DataSerializer(data, many=False)
         return Response(serializer.data)
 
 

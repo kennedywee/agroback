@@ -6,6 +6,7 @@ urlpatterns = [
 
     # Fronted
     path('read/<str:pk>/', views.getMyData, name='frontdata-list'),
+    path('create/', views.createData, name='frontdata-create'),
 
 
     # Dashboard

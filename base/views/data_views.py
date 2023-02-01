@@ -2,7 +2,8 @@ from django.shortcuts import get_object_or_404
 
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework import generics
+from rest_framework import generics, status
+
 
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
@@ -26,27 +27,31 @@ def getMyData(request, pk):
 def createData(request):
 
     data = request.data
-    id = request.data["id"]
+    id = data["device"]
     device = get_object_or_404(Device, id=id)
 
     latest_data = Data.objects.filter(
         device=device).order_by('-created').first()
 
-    field1 = data.get("field1") if latest_data else None
-    field2 = data.get("field2") if latest_data else None
-    field3 = data.get("field3") if latest_data else None
-    field4 = data.get("field4") if latest_data else None
-    field5 = data.get("field5") if latest_data else None
+    field1 = data.get('field1', None)
+    field2 = data.get('field2', None)
+    field3 = data.get('field3', None)
+    field4 = data.get('field4', None)
+    field5 = data.get('field5', None)
 
-    new_data = Data.objects.create(device=device,
-                                   field1=field1,
-                                   field2=field2,
-                                   field3=field3,
-                                   field4=field4,
-                                   field5=field5)
-    new_data.save()
-    serializer = DataSerializer(new_data)
-    return Response(serializer.data)
+    if latest_data:
+        field1 = data.get('field1', latest_data.field1)
+        field2 = data.get('field2', latest_data.field2)
+        field3 = data.get('field3', latest_data.field3)
+        field4 = data.get('field4', latest_data.field4)
+        field5 = data.get('field5', latest_data.field5)
+
+    serializer = DataSerializer(
+        data={'device': id, 'field1': field1, 'field2': field2, 'field3': field3, 'field4': field4, 'field5': field5})
+    if serializer.is_valid():
+        serializer.save(device=device)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET'])

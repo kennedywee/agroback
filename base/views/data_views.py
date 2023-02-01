@@ -62,7 +62,7 @@ def getDashboardData(request):
         device_data = Data.objects.filter(device=device)
         data.extend(device_data)
 
-    serializer = DataSerializer(data, many=True)
+    serializer = DataSerializer(data[:50], many=True)
     return Response(serializer.data)
 
 

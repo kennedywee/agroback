@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from rest_framework_simplejwt.tokens import RefreshToken
-from .models import Device, Data, Alert, Widget
+from .models import Device, Data, Alert, Widget, Schedule
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -25,6 +25,20 @@ class UserSerializer(serializers.ModelSerializer):
             name = obj.email
 
         return name
+
+
+class AlertSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Alert
+        fields = "__all__"
+
+
+class ScheduleSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Schedule
+        fields = "__all__"
 
 
 class UserSerializerWithToken(UserSerializer):

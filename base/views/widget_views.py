@@ -1,12 +1,9 @@
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
+from django.shortcuts import get_object_or_404
 
-from rest_framework import generics
-from rest_framework import serializers
-
-
-from base.models import Widget
+from base.models import Widget, Device
 from base.serializers import WidgetSerializer
 
 
@@ -37,9 +34,24 @@ def updateWidget(request, pk):
 @permission_classes([IsAuthenticated])
 def createWidget(request):
     user = request.user
+    data = request.data
 
-    widget = Widget.objects.create(user=user)
+    id = request.data["device"]
+    device = get_object_or_404(Device, id=id)
+
+    widget = Widget.objects.create(user=user,
+                                   device=device,
+                                   type=data["type"],
+                                   datafield=data["field"])
 
     widget.save()
     serializer = WidgetSerializer(widget, many=False)
     return Response(serializer.data)
+
+
+@api_view(['DELETE'])
+@permission_classes([IsAdminUser])
+def deleteWidget(request, pk):
+    widget = Widget.objects.get(i=pk)
+    widget.delete()
+    return Response("Widget is successfully deleted!")

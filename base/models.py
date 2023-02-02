@@ -135,6 +135,8 @@ class Widget(models.Model):
     device = models.ForeignKey(
         Device, on_delete=models.CASCADE, null=True, blank=True)
     datafield = models.CharField(max_length=20, blank=True)
+    device_name = models.CharField(max_length=100, null=True, blank=True)
+    field_name = models.CharField(max_length=100, null=True, blank=True)
     w = models.IntegerField(null=True, blank=False)
     h = models.IntegerField(null=True, blank=False)
     y = models.IntegerField(default=0, null=False, blank=True)
@@ -192,6 +194,14 @@ class Widget(models.Model):
                 self.minW = 3
                 self.w = 3
                 self.h = 5
+
+        if self.device:
+            self.device_name = self.device.name
+        if self.datafield:
+            fields = [self.device.field1, self.device.field2,
+                      self.device.field3, self.device.field4, self.device.field5]
+            field_index = int(self.datafield[-1]) - 1
+            self.field_name = fields[field_index]
 
         return super().save(*args, **kwargs)
 

@@ -64,10 +64,10 @@ def getDashboardData(request):
     data = []
 
     for device in devices:
-        device_data = Data.objects.filter(device=device)
+        device_data = Data.objects.filter(device=device)[:50]
         data.extend(device_data)
 
-    serializer = DataSerializer(data[:50], many=True)
+    serializer = DataSerializer(data, many=True)
     return Response(serializer.data)
 
 

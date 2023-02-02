@@ -8,6 +8,7 @@ from base.serializers import AlertSerializer
 
 
 from django.core.mail import send_mail
+from django.conf import settings
 
 
 @api_view(['GET'])
@@ -84,3 +85,20 @@ def send_alert_email(alert):
     )
     recipient_list = [alert.user.email]
     send_mail(subject, message, 'from@example.com', recipient_list)
+
+
+def send_alert_email_test(request):
+
+    alert = Alert.objects.get(id=8)
+    email_host = settings.EMAIL_HOST_USER
+
+    subject = 'Alert triggered: {}'.format(alert.name)
+    message = 'The alert {} has been triggered for device {}. The message is: {}'.format(
+        alert.name,
+        alert.device,
+        alert.message
+    )
+    recipient_list = [alert.user.email]
+    send_mail(subject, message, email_host, recipient_list)
+
+    return Response("email sent")

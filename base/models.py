@@ -157,9 +157,9 @@ class Widget(models.Model):
                 self.maxH = 11
                 self.maxW = 12
                 self.minH = 8
-                self.minW = 7
-                self.w = 8
-                self.h = 7
+                self.minW = 6
+                self.w = 6
+                self.h = 6
 
             elif self.type == FieldTypes.GAUGE:
                 self.maxH = 5

@@ -1,9 +1,10 @@
+from django.conf import settings
+from django.core.mail import send_mail
 from datetime import timedelta
 from django.db import models
 from django.contrib.auth.models import User
 import string
 import random
-
 API_KEY_LENGTH = 20
 
 
@@ -96,11 +97,43 @@ class Data(models.Model):
         # check if there is any active alert associated with the device
         alerts = Alert.objects.filter(device=self.device, active=True)
 
-        for alert in alerts:
-            # check if the updated data meets the criteria set in the alert
-            if eval("self.field" + str(alert.field) + alert.condition_value):
-                # trigger the alert
-                pass
+        if alerts.exists():
+            for alert in alerts:
+                field_value = getattr(self, alert.field)
+
+                if field_value == alert.condition_value:
+
+                    email_host = settings.EMAIL_HOST_USER
+
+                    subject = 'Alert triggered: {}'.format(alert.name)
+                    message = 'The alert {} has been triggered for device {}. The message is: {}'.format(
+                        alert.name,
+                        alert.device,
+                        alert.message
+                    )
+                    recipient_list = [alert.user.email]
+                    send_mail(subject, message, email_host, recipient_list)
+                    print("yes boss")
+                    alert.active = False
+                    alert.save()
+
+    def save(self, *args, **kwargs):
+        latest_data = Data.objects.filter(
+            device=self.device).order_by('-created').first()
+        self.field1 = self.field1 or (
+            latest_data.field1 if latest_data else None)
+        self.field2 = self.field2 or (
+            latest_data.field2 if latest_data else None)
+        self.field3 = self.field3 or (
+            latest_data.field3 if latest_data else None)
+        self.field4 = self.field4 or (
+            latest_data.field4 if latest_data else None)
+        self.field5 = self.field5 or (
+            latest_data.field5 if latest_data else None)
+        if self.pk is None:
+            self.check_alert()
+            print("checking alert")
+        super().save(*args, **kwargs)
 
 
 class Alert(models.Model):
@@ -109,7 +142,7 @@ class Alert(models.Model):
     name = models.CharField(max_length=20)
     device = models.ForeignKey(Device, on_delete=models.CASCADE)
     field = models.CharField(max_length=20)
-    condition_value = models.CharField(max_length=20)
+    condition_value = models.FloatField(max_length=20)
     message = models.TextField(max_length=200)
     frequency = models.BooleanField(default=False)
     active = models.BooleanField(default=True)

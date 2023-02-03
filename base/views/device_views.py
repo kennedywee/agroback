@@ -27,6 +27,7 @@ def getDevice(request, pk):
 def createDevice(request):
     user = request.user
     data = request.data
+    print(data)
 
     device = Device.objects.create(
         user=user,

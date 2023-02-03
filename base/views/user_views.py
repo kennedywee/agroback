@@ -10,6 +10,8 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from django.contrib.auth.hashers import make_password
 from rest_framework import status
 
+import json
+
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
@@ -28,7 +30,8 @@ class MyTokenObtainPairView(TokenObtainPairView):
 
 @api_view(['POST'])
 def registerUser(request):
-    data = request.data
+    data = json.loads(request.body)['name']
+    print(data)
     try:
         user = User.objects.create(
             first_name=data['name'],

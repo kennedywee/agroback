@@ -53,7 +53,7 @@ def createDevice(request):
 
 
 @api_view(['DELETE'])
-@permission_classes([IsAdminUser])
+@permission_classes([IsAuthenticated])
 def deleteDevice(request, pk):
     device = Device.objects.get(id=pk)
     device.delete()

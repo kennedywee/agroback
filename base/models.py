@@ -118,18 +118,18 @@ class Data(models.Model):
                     alert.save()
 
     def save(self, *args, **kwargs):
-        latest_data = Data.objects.filter(
-            device=self.device).order_by('-created').first()
-        self.field1 = self.field1 or (
-            latest_data.field1 if latest_data else None)
-        self.field2 = self.field2 or (
-            latest_data.field2 if latest_data else None)
-        self.field3 = self.field3 or (
-            latest_data.field3 if latest_data else None)
-        self.field4 = self.field4 or (
-            latest_data.field4 if latest_data else None)
-        self.field5 = self.field5 or (
-            latest_data.field5 if latest_data else None)
+        # latest_data = Data.objects.filter(
+        #     device=self.device).order_by('-created').first()
+        # self.field1 = self.field1 or (
+        #     latest_data.field1 if latest_data else None)
+        # self.field2 = self.field2 or (
+        #     latest_data.field2 if latest_data else None)
+        # self.field3 = self.field3 or (
+        #     latest_data.field3 if latest_data else None)
+        # self.field4 = self.field4 or (
+        #     latest_data.field4 if latest_data else None)
+        # self.field5 = self.field5 or (
+        #     latest_data.field5 if latest_data else None)
         if self.pk is None:
             self.check_alert()
             print("checking alert")

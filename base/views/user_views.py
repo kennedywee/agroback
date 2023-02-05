@@ -75,7 +75,7 @@ def getUserProfile(request):
 
 
 @api_view(['GET'])
-@permission_classes([IsAdminUser])
+@permission_classes([IsAuthenticated])
 def getUsers(request):
     users = User.objects.all()
     serializer = UserSerializerWithToken(users, many=True)

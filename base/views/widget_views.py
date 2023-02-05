@@ -50,7 +50,7 @@ def createWidget(request):
 
 
 @api_view(['DELETE'])
-@permission_classes([IsAdminUser])
+@permission_classes([IsAuthenticated])
 def deleteWidget(request, pk):
     widget = Widget.objects.get(i=pk)
     widget.delete()

@@ -69,7 +69,7 @@ def updateAlert(request, pk):
 
 
 @api_view(['DELETE'])
-@permission_classes([IsAdminUser])
+@permission_classes([IsAuthenticated])
 def deleteAlert(request, pk):
     alert = Alert.objects.get(id=pk)
     alert.delete()

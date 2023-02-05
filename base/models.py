@@ -113,7 +113,11 @@ class Data(models.Model):
                     )
                     recipient_list = [alert.user.email]
                     send_mail(subject, message, email_host, recipient_list)
+                    print(alert.user.email)
+
                     print("yes boss")
+
+                    print("yes boss", flush=True)
                     alert.active = False
                     alert.save()
 
@@ -133,6 +137,7 @@ class Data(models.Model):
         if self.pk is None:
             self.check_alert()
             print("checking alert")
+            print("checking alert", flush=True)
         super().save(*args, **kwargs)
 
 

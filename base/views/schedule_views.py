@@ -8,6 +8,13 @@ from base.serializers import ScheduleSerializer
 
 
 @api_view(['GET'])
+def agroScheduler(request):
+    schedules = Schedule.objects.all()
+    serializer = ScheduleSerializer(schedules, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def getMySchedules(request):
     user = request.user

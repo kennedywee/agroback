@@ -71,6 +71,7 @@ class Device(models.Model):
         return api_key
 
     def save(self, *args, **kwargs):
+
         if not self.api_key:
             self.api_key = Device.generate_api()
 
@@ -79,11 +80,11 @@ class Device(models.Model):
 
 class Data(models.Model):
     device = models.ForeignKey(Device, on_delete=models.CASCADE)
-    field1 = models.FloatField(null=True, blank=True)
-    field2 = models.FloatField(null=True, blank=True)
-    field3 = models.FloatField(null=True, blank=True)
-    field4 = models.FloatField(null=True, blank=True)
-    field5 = models.FloatField(null=True, blank=True)
+    field1 = models.FloatField(default=0.0, null=True, blank=True)
+    field2 = models.FloatField(default=0.0, null=True, blank=True)
+    field3 = models.FloatField(default=0.0, null=True, blank=True)
+    field4 = models.FloatField(default=0.0, null=True, blank=True)
+    field5 = models.FloatField(default=0.0, null=True, blank=True)
 
     created = models.DateTimeField(auto_now_add=True)
 

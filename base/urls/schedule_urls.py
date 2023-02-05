@@ -10,4 +10,5 @@ urlpatterns = [
     path('create/', views.createSchedule, name='schedules-create'),
     path('update/<str:pk>/', views.updateSchedule, name='schedules-update'),
     path('delete/<str:pk>/', views.deleteSchedule, name='schedules-delete'),
+    path('agroscheduler/', views.agroScheduler, name='agroscheduler')
 ]

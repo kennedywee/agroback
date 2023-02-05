@@ -15,4 +15,8 @@ urlpatterns = [
     # Microcontroller
     path('read/', views.DataList.as_view(), name='data-list'),
     path('write/', views.CreateData.as_view(), name='data-add'),
+
+
+    # Agroscheduler
+    path('agroscheduler/<str:pk>/', views.agroScheduler, name='agroscheduler'),
 ]

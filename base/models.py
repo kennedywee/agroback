@@ -101,7 +101,15 @@ class Data(models.Model):
             for alert in alerts:
                 field_value = getattr(self, alert.field)
 
-                if field_value == alert.condition_value:
+                print(type(field_value))
+
+                print(type(alert.condition_value))
+
+                print(float(field_value) == float(alert.condition_value))
+
+                if float(field_value) == float(alert.condition_value):
+
+                    print("yes boss")
 
                     email_host = settings.EMAIL_HOST_USER
 
